@@ -27,12 +27,12 @@ func main() {
 		}(i)
 	}
 	// 当修改条件或者 wait() 时，必须加锁，保护 condition
-	c.L.Lock()
 	for ready != 10 {
+		c.L.Lock()
 		c.Wait()
+		c.L.Unlock()
 		fmt.Println("裁判员被唤醒一次")
 	}
-	c.L.Unlock()
 
 	fmt.Println("所有运动员都准备就绪，比赛开始。。。")
 }
