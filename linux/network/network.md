@@ -1,9 +1,16 @@
 # Network
 
+**【Kubernetes 网络权威指南】**
+- 将 P9-P11 中的 c 程序翻译成 go 程序；-- Open
+
 1) netns 命令
 
 ```shell
 ip netns help
+
+ip netns exec
+ip netns list
+ip netns delete
 ```
 ![img.png](img.png)
 ```shell
@@ -22,3 +29,10 @@ ip netns add ns1
 ip link set tap0 netns ns0
 ip link set tap1 netns ns1
 ```
+
+```shell
+# Linux 命令
+route -n
+iptables -L
+```
+
