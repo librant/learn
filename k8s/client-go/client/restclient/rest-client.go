@@ -13,8 +13,7 @@ import (
 )
 
 func main() {
-	log.SetFlags(log.Llongfile)
-
+	log.SetFlags(log.LstdFlags)
 	log.Println("rest-client demo")
 
 	// 通过参数传入 config 路径
