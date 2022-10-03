@@ -27,7 +27,7 @@ func main() {
 	config.GroupVersion = &corev1.SchemeGroupVersion
 
 	// 4 配置数据的编解码器
-	config.NegotiatedSerializer = schema.Codecs
+	config.NegotiatedSerializer = scheme.Codecs
 
 	// 5 实例化 rest client
 	restClient, err := rest.RESTClientFor(config)
@@ -40,13 +40,13 @@ func main() {
 	if err := restClient.Get().
 		Namespace("kube-system").
 		Resource("pods").
-		VersionedParams(&metav1.ListOptions{}, schema.ParameterCodec).
+		VersionedParams(&metav1.ListOptions{}, scheme.ParameterCodec).
 		Do(context.Background()).
 		Into(result); err != nil {
 		log.Panicln(err)
 	}
 
 	for _, item := range result.Items {
-		log.Printf("namespace: %s name: %s", item.Namespace, item.Name)
+		log.Printf("namespace: %s name: %s\n", item.Namespace, item.Name)
 	}
 }
