@@ -44,7 +44,7 @@ func main() {
 		}
 
 		for _, resource := range list.APIResources {
-			log.Printf("name: %v group: %v version: %v",
+			log.Printf("name: %v group: %v version: %v\n",
 				resource.Name, gv.Group, gv.Version)
 		}
 	}
