@@ -46,14 +46,14 @@ func main() {
 	// 启动 informer
 	sharedInformerFactory.Start(nil)
 
-	// 利用 indexer 获取数据
-	pods, err := podIndexer.List(labels.Everything())
-	if err != nil {
-		log.Panicln(err)
-	}
-
 	// 这里设置每五秒获取一次
 	for _ = range time.Tick(time.Second * 5) {
+		// 利用 indexer 获取数据
+		pods, err := podIndexer.List(labels.Everything())
+		if err != nil {
+			log.Panicln(err)
+		}
+
 		for _, pod := range pods {
 			log.Printf("namespace: %s name: %s\n", pod.Namespace, pod.Name)
 		}
