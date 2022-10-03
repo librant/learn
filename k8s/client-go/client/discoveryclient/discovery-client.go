@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -9,11 +10,16 @@ import (
 )
 
 func main() {
-	log.SetFlags(log.Llongfile)
+	log.SetFlags(log.LstdFlags)
 	log.Println("discovery-client demo")
 
+	// 通过参数传入 config 路径
+	kubeconfig := flag.String("kubeconfig", "./.kube/kubeconfig",
+		"Path to a kube config")
+	flag.Parse()
+
 	// 1 加载配置文件， 生成 config 对象
-	config, err := clientcmd.BuildConfigFromFlags("", clientcmd.RecommendedHomeDir)
+	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
 	if err != nil {
 		log.Panicln(err)
 	}
