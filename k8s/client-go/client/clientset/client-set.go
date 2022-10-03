@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"log"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -10,10 +11,16 @@ import (
 )
 
 func main() {
-	log.Println("clientset demon")
+	log.SetFlags(log.Lshortfile)
+	log.Println("client-set demon")
+
+	// 通过参数传入 config 路径
+	kubeconfig := flag.String("kubeconfig", "./.kube/kubeconfig",
+		"Path to a kube config")
+	flag.Parse()
 
 	// 1 加载配置文件
-	config, err := clientcmd.BuildConfigFromFlags("", clientcmd.RecommendedHomeDir)
+	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
 	if err != nil {
 		log.Panicln(err)
 	}
