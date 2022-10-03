@@ -52,7 +52,17 @@ func main() {
 
 	for _, item := range podList {
 		pod := item.(*corev1.Pod)
-		log.Printf("name: %s", pod.Name)
+		log.Printf("name: %s\n", pod.Name)
+	}
+
+	nodeList, err := index.ByIndex("node", "node-1")
+	if err != nil {
+		log.Panicln(err)
+	}
+
+	for _, item := range nodeList {
+		pod := item.(*corev1.Pod)
+		log.Printf("node: %s\n", pod.Spec.NodeName)
 	}
 }
 
