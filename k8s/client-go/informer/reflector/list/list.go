@@ -12,7 +12,7 @@ import (
 
 func main() {
 	log.SetFlags(log.Lshortfile)
-	log.Printf("reflector watch demo")
+	log.Printf("reflector list demo")
 
 	// 通过参数传入 config 路径
 	kubeconfig := flag.String("kubeconfig", "./.kube/kubeconfig",
@@ -31,20 +31,16 @@ func main() {
 		log.Panicln(err)
 	}
 
-	// 3 建立 watch 的链接
-	w, err := clientset.AppsV1().Deployments("default").
-		Watch(context.Background(), metav1.ListOptions{})
+	// 3 list 资源列表
+	deploymentList, err := clientset.AppsV1().Deployments("default").
+		List(context.Background(), metav1.ListOptions{})
 	if err != nil {
 		log.Panicln(err)
 	}
 
-	log.Printf("watch deployment begin...")
-
-	// 4 实时监听 watch 资源
-	for {
-		select {
-		case e, _ := <- w.ResultChan():
-			log.Printf("type: %v object: %v", e.Type, e.Object)
-		}
+	// 4 打印获取的资源信息
+	for _, item := range deploymentList.Items {
+		log.Printf("namespace: %s kind: %s, name: %s\n",
+			item.Namespace, item.Kind, item.Name)
 	}
 }
