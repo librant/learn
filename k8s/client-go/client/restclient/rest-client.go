@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"log"
 
 	corev1 "k8s.io/api/core/v1"
@@ -12,10 +13,17 @@ import (
 )
 
 func main() {
+	log.SetFlags(log.Llongfile)
+
 	log.Println("rest-client demo")
 
+	// 通过参数传入 config 路径
+	kubeconfig := flag.String("kubeconfig", "./.kube/kubeconfig",
+		"Path to a kube config")
+	flag.Parse()
+
 	// 1 指定 k8s 的配置文件
-	config, err := clientcmd.BuildConfigFromFlags("", clientcmd.RecommendedHomeDir)
+	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
 	if err != nil {
 		log.Panicln(err)
 	}
