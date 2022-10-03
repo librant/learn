@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+	"time"
 
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/informers"
@@ -54,7 +55,10 @@ func main() {
 		log.Panicln(err)
 	}
 
-	for _, item := range pods.Items {
-		log.Printf("namespace: %s name: %s\n", item.Namespace, item.Name)
+	// 这里设置每五秒获取一次
+	for _ = range time.Tick(time.Second * 5) {
+		for _, pod := range pods {
+			log.Printf("namespace: %s name: %s\n", pod.Namespace, pod.Name)
+		}
 	}
 }
