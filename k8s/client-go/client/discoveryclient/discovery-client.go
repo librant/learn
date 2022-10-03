@@ -9,7 +9,8 @@ import (
 )
 
 func main() {
-	log.Println("discovery client demo")
+	log.SetFlags(log.Llongfile)
+	log.Println("discovery-client demo")
 
 	// 1 加载配置文件， 生成 config 对象
 	config, err := clientcmd.BuildConfigFromFlags("", clientcmd.RecommendedHomeDir)

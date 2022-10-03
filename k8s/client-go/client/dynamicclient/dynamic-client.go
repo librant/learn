@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"log"
 
 	corev1 "k8s.io/api/core/v1"
@@ -13,10 +14,16 @@ import (
 )
 
 func main() {
-	log.Println("dynamic client demon")
+	log.SetFlags(log.Llongfile)
+	log.Println("dynamic-client demon")
+
+	// 通过参数传入 config 路径
+	kubeconfig := flag.String("kubeconfig", "./.kube/kubeconfig",
+		"Path to a kube config")
+	flag.Parse()
 
 	// 1 加载配置文件，生成 config 对象
-	config, err := clientcmd.BuildConfigFromFlags("", clientcmd.RecommendedHomeDir)
+	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
 	if err != nil {
 		log.Panicln(err)
 	}
@@ -37,7 +44,7 @@ func main() {
 	// 4 发送请求， 且得到返回结果
 	unStructData, err := dynamicClient.
 		Resource(gvr).
-		Namespace("kube-system").
+		Namespace("default").
 		List(context.Background(), metav1.ListOptions{})
 	if err != nil {
 		log.Panicln(err)
