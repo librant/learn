@@ -40,6 +40,7 @@ func main() {
 
 	// 4 打印获取的资源信息
 	for _, item := range deploymentList.Items {
+		// 这里实际的 kind 打印为空
 		log.Printf("namespace: %s kind: %s, name: %s\n",
 			item.Namespace, item.Kind, item.Name)
 	}
