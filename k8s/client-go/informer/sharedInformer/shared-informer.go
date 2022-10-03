@@ -15,9 +15,6 @@ func main() {
 	log.SetFlags(log.Lshortfile)
 	log.Printf("pod-informer demo")
 
-	stopChan := make(chan struct{})
-	defer close(stopChan)
-
 	// 通过参数传入 config 路径
 	kubeconfig := flag.String("kubeconfig", "./.kube/kubeconfig",
 		"Path to a kube config")
@@ -44,10 +41,10 @@ func main() {
 	podIndexer := podInformer.Lister()
 
 	// 等待数据同步完成
-	sharedInformerFactory.WaitForCacheSync(stopChan)
+	sharedInformerFactory.WaitForCacheSync(nil)
 
 	// 启动 informer
-	sharedInformerFactory.Start(stopChan)
+	sharedInformerFactory.Start(nil)
 
 	// 利用 indexer 获取数据
 	pods, err := podIndexer.List(labels.Everything())
