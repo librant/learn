@@ -21,7 +21,7 @@ func main() {
 			ready++
 			c.L.Unlock()
 
-			fmt.Printf("运动员%d已准备就绪\n",i)
+			fmt.Printf("运动员%d已准备就绪\n", i)
 			// 广播唤醒等待者，这里可以使用Broadcast和Signal
 			c.Signal()
 		}(i)

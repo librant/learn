@@ -26,7 +26,7 @@ func main() {
 
 	// 2 实例化客户端，本客户端负载将 GVR 数据，缓存本地文件中
 	cacheDiscoveryClient, err := disk.NewCachedDiscoveryClientForConfig(config,
-		"./cache/discovery", "./cache/http", time.Minute * 60)
+		"./cache/discovery", "./cache/http", time.Minute*60)
 	if err != nil {
 		log.Panicln(err)
 	}

@@ -43,7 +43,7 @@ func main() {
 	// 4 实时监听 watch 资源
 	for {
 		select {
-		case e, _ := <- w.ResultChan():
+		case e, _ := <-w.ResultChan():
 			log.Printf("type: %v object: %v", e.Type, e.Object)
 		}
 	}

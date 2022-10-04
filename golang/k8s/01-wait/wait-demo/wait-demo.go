@@ -17,6 +17,6 @@ func main() {
 	wait.Until(func() {
 		time.Sleep(100 * time.Millisecond)
 		log.Println("test")
-	}, 100 * time.Millisecond, ch)
+	}, 100*time.Millisecond, ch)
 	log.Println("main exit")
 }

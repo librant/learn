@@ -7,7 +7,7 @@ import (
 
 type Enum int
 
-const(
+const (
 	Zero Enum = 0
 )
 

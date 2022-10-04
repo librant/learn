@@ -34,13 +34,13 @@ func main() {
 	retList := funcValue.Call(paramList)
 	fmt.Println(retList[0].Int())
 
-	var myMath = MyMath{Pi:3.14159}
+	var myMath = MyMath{Pi: 3.14159}
 	//获取myMath的值对象
 	rValue := reflect.ValueOf(myMath)
 	// 获取有多少个方法
 	for i := 0; i < rValue.NumMethod(); i++ {
 		fmt.Printf("method[%d] type: %v\n", i, rValue.Method(i).Type())
-		paramList := []reflect.Value{reflect.ValueOf(30*(i+1)), reflect.ValueOf(20*(i+1))}
+		paramList := []reflect.Value{reflect.ValueOf(30 * (i + 1)), reflect.ValueOf(20 * (i + 1))}
 		result := rValue.Method(i).Call(paramList)
 		fmt.Println(result[0].Int())
 	}
