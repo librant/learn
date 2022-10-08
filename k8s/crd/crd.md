@@ -1,5 +1,5 @@
 
 ```shell
-kubectl apply -f resourcedefinition.yaml
+kubectl apply -f resourcedefinition-01.yaml
 ```
 
