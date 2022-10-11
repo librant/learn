@@ -21,3 +21,13 @@ brctl addbr br-new
 ```
 ![img_1.png](img_1.png)
 
+2、查看当前网桥上网络设备
+```shell
+bridge link
+```
+![img_2.png](img_2.png)
+
+```shell
+brctl show
+```
+![img_3.png](img_3.png)
