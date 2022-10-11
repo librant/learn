@@ -1,0 +1,23 @@
+
+### bridge: 
+多个 network namespace 中间进行连接（二层网络设备）
+
+1、创建网桥
+```shell
+ip link add name <bridge-name> type bridge
+```
+![img.png](img.png)
+
+2、启动网桥
+```shell
+ip link set <bridge-name> up
+```
+
+---
+---
+1、通过 brctl 工具进行创建网桥：（工具在 bridge-utils 包中）
+```shell
+brctl addbr br-new
+```
+![img_1.png](img_1.png)
+
