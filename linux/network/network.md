@@ -29,7 +29,7 @@ iptables -L
 ```
 ---
 
-ns/veth 创建
+netns/veth/bridge 创建
 
 ```shell
 ip netns add netns-new
