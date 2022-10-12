@@ -31,3 +31,8 @@ bridge link
 brctl show
 ```
 ![img_3.png](img_3.png)
+
+3、删除网桥上的 veth 设备
+```shell
+brctl delif <br-name> <veth-name>
+```

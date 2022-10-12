@@ -67,3 +67,32 @@ tcpdump -n -i veth-new2
 ```shell
 tcpdump -n -i br-new
 ```
+
+配置网桥 IP:
+
+1、删除 veth-new1 的IP:
+```shell
+ip addr del 10.1.2.1/24 dev veth-new1
+```
+
+2、新增 br-new 的 IP:
+```shell
+ip addr add 10.1.2.1/24 dev br-new
+```
+![img_4.png](img_4.png)
+
+3、混杂模式：
+- 查看：
+```shell
+ifconfig eth0
+```
+![img_5.png](img_5.png)
+- 开启：
+```shell
+ifconfig eth0 promisc
+```
+- 关闭：
+```shell
+ifconfig eth0 -promisc
+```
+
