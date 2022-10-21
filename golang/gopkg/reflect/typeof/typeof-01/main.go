@@ -13,7 +13,9 @@ type Student struct {
 func main() {
 	var stu Student
 	typeOfStu := reflect.TypeOf(stu)
+	valueOfStu := reflect.ValueOf(stu)
 	fmt.Println(typeOfStu.Name(), typeOfStu.Kind())
+	fmt.Println(valueOfStu.Kind())
 	// Student struct
 
 	stuPtr := &Student{
