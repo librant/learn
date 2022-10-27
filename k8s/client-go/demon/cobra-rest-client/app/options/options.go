@@ -1,7 +1,9 @@
 package options
 
 import (
+	"github.com/spf13/pflag"
 	cliflag "k8s.io/component-base/cli/flag"
+	componentbaseconfig "k8s.io/component-base/config"
 	"k8s.io/component-base/logs"
 	logsapi "k8s.io/component-base/logs/api/v1"
 )
@@ -11,8 +13,11 @@ type Options struct {
 	// ConfigFile is the location of the scheduler server's configuration file.
 	ConfigFile string
 
-	Logs *logs.Options
+	// clientConnection specifies the kubeconfig file and client connection settings for the proxy
+	// server to use when communicating with the apiserver.
+	ClientConnection componentbaseconfig.ClientConnectionConfiguration
 
+	Logs *logs.Options
 	// Flags hold the parsed CLI flags.
 	Flags *cliflag.NamedFlagSets
 }
@@ -39,4 +44,13 @@ func (o *Options) initFlags() {
 	logsapi.AddFlags(o.Logs, nfs.FlagSet("logs"))
 
 	o.Flags = &nfs
+}
+
+// AddFlags adds flags to fs and binds them to options.
+func (o *Options) AddFlags(fs *pflag.FlagSet) {
+
+	fs.StringVar(&o.ClientConnection.Kubeconfig, "kubeconfig", o.ClientConnection.Kubeconfig,
+		"Path to kubeconfig file with authorization information (the master location can be overridden by the master flag).")
+
+	return
 }
