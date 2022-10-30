@@ -3,8 +3,10 @@ package app
 import (
 	"flag"
 	"fmt"
+	"log"
 
 	"github.com/spf13/cobra"
+	"k8s.io/klog/v2"
 
 	"github.com/librant/learn/k8s/client-go/demon/cobra-rest-client/app/options"
 )
@@ -17,8 +19,10 @@ func NewRestClientCommand() *cobra.Command {
 		Use:  "rest-client",
 		Long: "k8s rest client",
 		// stop printing usage when the command errors
-		SilenceUsage: true,
+		SilenceUsage: false,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			klog.Infof("hello")
+			log.Println("hello")
 			return nil
 		},
 		Args: func(cmd *cobra.Command, args []string) error {
