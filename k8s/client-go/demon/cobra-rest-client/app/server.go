@@ -2,13 +2,9 @@ package app
 
 import (
 	"flag"
-	"fmt"
-	"log"
-
-	"github.com/spf13/cobra"
-	"k8s.io/klog/v2"
-
 	"github.com/librant/learn/k8s/client-go/demon/cobra-rest-client/app/options"
+	"github.com/spf13/cobra"
+	"log"
 )
 
 // NewRestClientCommand 生成 rest client 命令
@@ -21,16 +17,7 @@ func NewRestClientCommand() *cobra.Command {
 		// stop printing usage when the command errors
 		SilenceUsage: false,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			klog.Infof("hello")
-			log.Println("hello")
-			return nil
-		},
-		Args: func(cmd *cobra.Command, args []string) error {
-			for _, arg := range args {
-				if len(arg) > 0 {
-					return fmt.Errorf("%q does not take any arguments, got %q", cmd.CommandPath(), args)
-				}
-			}
+			log.Printf("helloworld: %v", args)
 			return nil
 		},
 	}
