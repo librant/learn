@@ -2,20 +2,29 @@ package app
 
 import (
 	"flag"
-	"github.com/librant/learn/k8s/client-go/demon/cobra-rest-client/app/options"
-	"github.com/spf13/cobra"
 	"log"
+
+	"github.com/spf13/cobra"
+
+	"github.com/librant/learn/k8s/client-go/demon/cobra-rest-client/app/options"
 )
+
+var (
+	// the command name
+	cmdName = "run"
+)
+
 
 // NewRestClientCommand 生成 rest client 命令
 func NewRestClientCommand() *cobra.Command {
 	opts := options.NewOptions()
 
 	cmd := &cobra.Command{
-		Use:  "rest-client",
-		Long: "k8s rest client",
+		Use:  cmdName,
+		Short: "rest client run",
+		Long: "ignore",
 		// stop printing usage when the command errors
-		SilenceUsage: false,
+		SilenceUsage: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			log.Printf("helloworld: %v", args)
 			return nil
