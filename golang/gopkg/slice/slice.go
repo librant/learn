@@ -2,7 +2,15 @@ package main
 
 import (
 	"log"
+	"unsafe"
 )
+
+// slice 切片的定义
+type slice struct {
+	array unsafe.Pointer
+	len   int
+	cap   int
+}
 
 func main() {
 	// slice 变量本身的地址不会变, slice 中的 array 指针会因为 cap 容量不够后会重新分配；
