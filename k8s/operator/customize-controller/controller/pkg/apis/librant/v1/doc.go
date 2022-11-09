@@ -2,7 +2,3 @@
 
 // +groupName=librant.example.com
 package v1
-
-
-
-
