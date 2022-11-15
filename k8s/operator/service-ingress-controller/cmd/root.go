@@ -44,14 +44,14 @@ var (
 			}
 			factory := informers.NewSharedInformerFactory(clientset, 0)
 
-			serviceInfomer := factory.Core().V1().Services()
-			ingressInfomer := factory.Networking().V1().Ingresses()
+			serviceInformer := factory.Core().V1().Services()
+			ingressInformer := factory.Networking().V1().Ingresses()
 
 			stopCh := make(chan struct{})
 			factory.Start(stopCh)
 			factory.WaitForCacheSync(stopCh)
 
-			c := pkg.New(clientset, serviceInfomer, ingressInfomer)
+			c := pkg.New(clientset, serviceInformer, ingressInformer)
 			c.Run(stopCh)
 		},
 	}
