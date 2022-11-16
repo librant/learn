@@ -48,7 +48,7 @@ var (
 			ingressInformer := factory.Networking().V1().Ingresses()
 
 			stopCh := make(chan struct{})
-			factory.Start(stopCh)
+			go factory.Start(stopCh)
 			factory.WaitForCacheSync(stopCh)
 
 			c := pkg.New(clientset, serviceInformer, ingressInformer)
