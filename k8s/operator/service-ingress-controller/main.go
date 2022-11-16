@@ -8,7 +8,7 @@ import (
 
 func main() {
 	log.SetFlags(log.Lshortfile | log.Ltime)
-	log.Printf("hello world")
+	log.Printf("service-ingress-controller start...")
 
 	cmd.Execute()
 }

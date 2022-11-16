@@ -1,11 +1,11 @@
-module github.com/librant/learn/k8s/client-go/informer/indexer
+module github.com/librant/learn/k8s/client-go/informer/indexer/demon02
 
 go 1.18
 
 require (
-	k8s.io/api v0.25.2
-	k8s.io/apimachinery v0.25.2
-	k8s.io/client-go v0.25.2
+	k8s.io/api v0.25.4
+	k8s.io/apimachinery v0.25.4
+	k8s.io/client-go v0.25.4
 )
 
 require (
