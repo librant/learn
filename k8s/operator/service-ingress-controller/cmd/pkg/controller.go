@@ -75,7 +75,7 @@ func (c *controller) worker() {
 
 func (c *controller) processNextItem() bool {
 	item, st := c.queue.Get()
-	if st {
+	if !st {
 		return false
 	}
 	defer c.queue.Done(item)
