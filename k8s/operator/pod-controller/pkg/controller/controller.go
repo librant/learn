@@ -67,7 +67,15 @@ func (c *controller) Run(stopCh chan struct{}) {
 }
 
 func (c *controller) runWorker() {
-
+	for {
+		func() {
+			key, quit := c.queue.Get()
+			if quit {
+				return
+			}
+			defer c.queue.Done(key)
+		}()
+	}
 }
 
 func (c *controller) addPod(obj interface{}) {
