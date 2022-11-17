@@ -1,6 +1,7 @@
 package controller
 
 const (
-	workNum = 5
-	maxRetry = 10
+	controllerAgentName = "pod-controller"
+	successSynced = "Synced"
+	messageResourceSynced = "Pod synced successfully"
 )

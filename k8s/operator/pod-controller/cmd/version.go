@@ -1,9 +1,8 @@
 package cmd
 
 import (
-	"log"
-
 	"github.com/spf13/cobra"
+	"k8s.io/klog"
 )
 
 var versionCmd = &cobra.Command{
@@ -12,6 +11,6 @@ var versionCmd = &cobra.Command{
 	Long:  `All software has versions. This is Hugo's`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO: 添加 git commit message
-		log.Printf("version: v1.0")
+		klog.Info("version: v1.0")
 	},
 }

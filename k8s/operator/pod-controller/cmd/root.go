@@ -1,13 +1,19 @@
 package cmd
 
 import (
-	"log"
 	"os"
+	"time"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"k8s.io/apimachinery/pkg/util/runtime"
+	"k8s.io/client-go/informers"
+	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/tools/clientcmd"
+	"k8s.io/klog"
 
 	"github.com/librant/learn/k8s/operator/pod-controller/pkg/controller"
+	"github.com/librant/learn/k8s/operator/pod-controller/pkg/signals"
 )
 
 // kubeConfig kube-config path
@@ -19,10 +25,27 @@ var rootCmd = &cobra.Command{
 	Short: "controller-controller damon",
 	Long:  `controller-controller is a simple k8s controller which watch controller change`,
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Printf("controller-controller kubeconfig: %s", kubeConfig)
-		stopCh := make(chan struct{})
-		podController := controller.New(kubeConfig)
-		podController.Run(stopCh)
+		klog.Infof("controller-controller kubeconfig: %s", kubeConfig)
+		stopCh := signals.SetupSignalHandler()
+		config, err := clientcmd.BuildConfigFromFlags("", kubeConfig)
+		if err != nil {
+			klog.Fatalln(err)
+		}
+		clientset, err := kubernetes.NewForConfig(config)
+		if err != nil {
+			klog.Fatalln(err)
+		}
+
+		podFactory := informers.NewSharedInformerFactory(clientset, time.Minute)
+		podInformer := podFactory.Core().V1().Pods()
+		podController := controller.New(clientset, podInformer)
+
+		// 启动 informer
+		go podFactory.Start(stopCh)
+
+		if err := podController.Run(maxWorkNum, stopCh); err != nil {
+			klog.Fatalln(err)
+		}
 	},
 }
 
@@ -47,7 +70,7 @@ func initConfig() {
 // Execute cmd execute
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		log.Printf("rootCmd execute failed: %v", err)
+		runtime.HandleError(err)
 		os.Exit(1)
 	}
 }
