@@ -6,6 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/librant/learn/k8s/operator/pod-controller/pkg/controller"
 )
 
 // kubeConfig kube-config path
@@ -18,8 +20,9 @@ var rootCmd = &cobra.Command{
 	Long:  `controller-controller is a simple k8s controller which watch controller change`,
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Printf("controller-controller kubeconfig: %s", kubeConfig)
-
-
+		stopCh := make(chan struct{})
+		podController := controller.New(kubeConfig)
+		podController.Run(stopCh)
 	},
 }
 
