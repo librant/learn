@@ -71,7 +71,7 @@ func getPods(num, start int) []*corev1.Pod {
 	for i := 0; i < num; i++ {
 		pods[i] = &corev1.Pod{
 			ObjectMeta: metav1.ObjectMeta{
-				Name:      fmt.Sprintf("pod-index-%d", i+start),
+				Name:      fmt.Sprintf("controller-index-%d", i+start),
 				Namespace: getNamespaceMap(i),
 			},
 			Spec: corev1.PodSpec{

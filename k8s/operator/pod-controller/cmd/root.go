@@ -1,10 +1,11 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"log"
 	"os"
+
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // kubeConfig kube-config path
@@ -13,10 +14,12 @@ var kubeConfig string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "root-cmd",
-	Short: "pod-controller damon",
-	Long:  `pod-controller is a simple k8s controller which watch pod change`,
+	Short: "controller-controller damon",
+	Long:  `controller-controller is a simple k8s controller which watch controller change`,
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Printf("pod-controller kubeconfig: %s", kubeConfig)
+		log.Printf("controller-controller kubeconfig: %s", kubeConfig)
+
+
 	},
 }
 

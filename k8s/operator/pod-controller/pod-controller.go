@@ -13,7 +13,7 @@ var (
 func main() {
 	log.SetFlags(log.Lshortfile | log.Ltime)
 
-	log.Printf("pod-controller author: %s", Author)
+	log.Printf("controller-controller author: %s", Author)
 
 	cmd.Execute()
 }

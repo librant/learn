@@ -2,9 +2,9 @@
 
 ```shell
 IndexFunc：索引器函数，用于计算一个资源对象的索引值列表，上面示例是指定命名空间为索引值结果，当然我们也可以根据需求定义其他的，比如根据 Label 标签、Annotation 等属性来生成索引值列表。
-Index：存储数据，对于上面的示例，我们要查找某个命名空间下面的 Pod，那就要让 Pod 按照其命名空间进行索引，对应的 Index 类型就是 map[namespace]sets.pod。
+Index：存储数据，对于上面的示例，我们要查找某个命名空间下面的 Pod，那就要让 Pod 按照其命名空间进行索引，对应的 Index 类型就是 map[namespace]sets.controller。
 Indexers：存储索引器，key 为索引器名称，value 为索引器的实现函数，上面的示例就是 map["namespace"]MetaNamespaceIndexFunc。
-Indices：存储缓存器，key 为索引器名称，value 为缓存的数据，对于上面的示例就是 map["namespace"]map[namespace]sets.pod
+Indices：存储缓存器，key 为索引器名称，value 为缓存的数据，对于上面的示例就是 map["namespace"]map[namespace]sets.controller
 ```
 
 ```shell

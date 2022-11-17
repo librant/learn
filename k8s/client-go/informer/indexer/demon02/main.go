@@ -22,21 +22,21 @@ func main() {
 
 	pod1 := &v1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      "index-pod-1",
+			Name:      "index-controller-1",
 			Namespace: "default",
 		},
 		Spec: v1.PodSpec{NodeName: "node1"},
 	}
 	pod2 := &v1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      "index-pod-2",
+			Name:      "index-controller-2",
 			Namespace: "default",
 		},
 		Spec: v1.PodSpec{NodeName: "node2"},
 	}
 	pod3 := &v1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      "index-pod-3",
+			Name:      "index-controller-3",
 			Namespace: "kube-system",
 		},
 		Spec: v1.PodSpec{NodeName: "node2"},

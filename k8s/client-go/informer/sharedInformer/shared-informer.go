@@ -13,7 +13,7 @@ import (
 
 func main() {
 	log.SetFlags(log.Lshortfile)
-	log.Printf("pod-informer demo")
+	log.Printf("controller-informer demo")
 
 	// 通过参数传入 config 路径
 	kubeconfig := flag.String("kubeconfig", "./.kube/kubeconfig",
@@ -35,7 +35,7 @@ func main() {
 	// 3 初始化 NewSharedInformerFactory
 	sharedInformerFactory := informers.NewSharedInformerFactory(clientset, 0)
 
-	// 生成 pod informers
+	// 生成 controller informers
 	podInformer := sharedInformerFactory.Core().V1().Pods()
 	// 生成 Indexer
 	podIndexer := podInformer.Lister()

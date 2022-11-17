@@ -74,7 +74,7 @@ func WebConsoleLink(kubeconfig string, w http.ResponseWriter, r *http.Request) e
 		RESTClient().
 		Post().
 		Resource("pods").
-		Name("pod-name").
+		Name("controller-name").
 		Namespace("ns-name").
 		SubResource("exec").
 		VersionedParams(&v1.PodExecOptions{
