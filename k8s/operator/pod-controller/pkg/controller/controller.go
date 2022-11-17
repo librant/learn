@@ -127,7 +127,8 @@ func (c *controller) syncHandler(key string) error {
 		return err
 	}
 
-	klog.Infof("pod yaml: %#v", pod)
+	// 这是实际获取集群中 pod 的状态
+	klog.Infof("pod yaml: %s/%s", pod.Namespace, pod.Name)
 
 	// TODO：这里可以校验当前 pod 的状态
 
