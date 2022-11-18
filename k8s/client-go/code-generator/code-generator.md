@@ -29,6 +29,20 @@ chmod +x vendor/k8s.io/code-generator/generate-groups.sh
 ./hack/update-codegen.sh
 ```
 
+```shell
+- deepcopy-gen
+- defaulter-gen
+- conversion-gen
+- openapi-gen
+- go-bindata
+```
+- client-gen
+- lister-gen
+- informer-gen
+
+
+
+
 
 
 
