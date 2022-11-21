@@ -1,5 +1,5 @@
 
-### VxLa 基本配置命令
+### VxLan 基本配置命令
 
 1、创建 VxLan 接口
 ```shell
