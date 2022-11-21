@@ -17,5 +17,6 @@ func main() {
 }
 
 func hello(req *restful.Request, resp *restful.Response) {
+	log.Printf("hello method: ")
 	io.WriteString(resp, "world\n")
 }
