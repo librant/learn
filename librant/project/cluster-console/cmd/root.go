@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/librant/learn/librant/project/cluster-console/pkg/config"
 	"net/http"
 	"os"
 
@@ -23,6 +24,9 @@ var rootCmd = &cobra.Command{
 	Long:  `cluster-console is a simple k8s cluster which for container login`,
 	Run: func(cmd *cobra.Command, args []string) {
 		klog.Infof("cluster-console run begin...")
+		if err := config.Init(kubeConfig); err != nil {
+			klog.Fatal(err)
+		}
 		router := gin.Default()
 		// 静态资源加载，本例为 css,js 以及资源图片
 		router.StaticFS("/public", http.Dir("./static"))
