@@ -10,18 +10,6 @@ import (
 	"github.com/librant/learn/librant/project/cluster-console/internal/pkg/console"
 )
 
-// Handler 容器登录处理
-type Handler struct {
-	client ClusterClient
-}
-
-// New 生成实例
-func New(client ClusterClient) *Handler {
-	return &Handler{
-		client: client,
-	}
-}
-
 // IndexHandler index handler
 func IndexHandler(c *gin.Context) {
 	// 获取 GET 请求中的参数信息
@@ -33,6 +21,8 @@ func IndexHandler(c *gin.Context) {
 		return
 	}
 	klog.Infof("IndexHandler param: %v", param)
+
+
 
 	return
 }
