@@ -1,14 +1,13 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: pod-controller-role-binding
+  name: pod-controller-cluster-role-binding
   namespace: default
 subjects:
   - kind: ServiceAccount
     name: pod-controller # "name" is case sensitive
     namespace: default
-    apiGroup: rbac.authorization.k8s.io
 roleRef:
-  kind: Role # this must be Role or ClusterRole
-  name: pod-controller-role # this must match the name of the Role or ClusterRole you wish to bind to
+  kind: ClusterRole # this must be Role or ClusterRole
+  name: pod-controller-cluster-role # this must match the name of the Role or ClusterRole you wish to bind to
   apiGroup: rbac.authorization.k8s.io
