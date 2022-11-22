@@ -3,11 +3,12 @@ package config
 import (
 	"io/ioutil"
 
-	v1 "github.com/kubernetes/client-go/tools/clientcmd/api/v1"
 	"k8s.io/apimachinery/pkg/util/yaml"
 	"k8s.io/client-go/kubernetes"
+	v1 "k8s.io/client-go/tools/clientcmd/api/v1"
 )
 
+// clientSetMap key 为 contextName
 var clientSetMap map[string]kubernetes.Interface
 
 // Init 初始化
