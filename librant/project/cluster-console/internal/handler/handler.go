@@ -7,8 +7,20 @@ import (
 	"github.com/gin-gonic/gin"
 	"k8s.io/klog"
 
-	"github.com/librant/learn/librant/project/cluster-console/pkg/handler/console"
+	"github.com/librant/learn/librant/project/cluster-console/internal/pkg/console"
 )
+
+// Handler 容器登录处理
+type Handler struct {
+	client ClusterClient
+}
+
+// New 生成实例
+func New(client ClusterClient) *Handler {
+	return &Handler{
+		client: client,
+	}
+}
 
 // IndexHandler index handler
 func IndexHandler(c *gin.Context) {

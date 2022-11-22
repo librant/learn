@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"github.com/librant/learn/librant/project/cluster-console/pkg/config"
 	"net/http"
 	"os"
 
@@ -11,7 +10,8 @@ import (
 	"k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/klog"
 
-	"github.com/librant/learn/librant/project/cluster-console/pkg/handler"
+	"github.com/librant/learn/librant/project/cluster-console/internal/handler"
+	"github.com/librant/learn/librant/project/cluster-console/internal/pkg/config"
 )
 
 // kubeConfig kube-config path
