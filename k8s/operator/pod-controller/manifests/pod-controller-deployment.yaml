@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-controller-deployment
+  labels:
+    app: pod-controller
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pod-controller
+  template:
+    metadata:
+      labels:
+        app: pod-controller
+    spec:
+      containers:
+        - name: pod-controller
+          image: pod-controller:v1.0.0
+          ports:
+            - containerPort: 80
