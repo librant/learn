@@ -29,10 +29,10 @@ var rootCmd = &cobra.Command{
 		}
 		router := gin.Default()
 		// 静态资源加载，本例为 css,js 以及资源图片
-		router.StaticFS("/public", http.Dir("./static"))
-		router.StaticFile("/favicon.ico", "./static/resources/favicon.ico")
+		router.StaticFS("/static/", http.Dir("."))
+		router.StaticFile("/favicon.ico", "/static/favicon.ico")
 
-		router.GET("/index.html", handler.IndexHandler)
+		router.GET("/login", handler.IndexHandler)
 		klog.Fatal(router.Run(":8080"))
 	},
 }
