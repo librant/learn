@@ -11,9 +11,7 @@ func main() {
 }
 
 // 动态规划
-
 // dp[i]: 标识 第 i 位置能接的最大高度 等于 左右两边各自最大值中的最小值 减去 f[i] 位置的值
-
 // dp[i] = MIN(MAX(f[0 ~ i-1])，MAX(f[i+1, n-1]))) - f[i]
 
 func trap(height []int) int {
