@@ -1,15 +1,14 @@
 
+[深入理解 Kubernetes Admission Webhook](https://www.qikqiak.com/post/k8s-admission-webhook/)
+
 1、Validating Admission Webhook <p>
 2、Mutating Admission Webhook <p>
 
-![img.png](img.png)
+![img_2.png](img_2.png)
 
 ---
-
 ```shell
-1、向 k8s 集群中注册 Admission Webhook（Validating / Mutating）
-
-
+向 k8s 集群中注册 Admission Webhook（Validating / Mutating）
 ```
 
 1）检查 api-server 是否开启 
