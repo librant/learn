@@ -60,4 +60,27 @@
 - podManager:  
   podManager 提供了接口来存储和访问 pod 的信息，维持 static pod 和 mirror pods 的关系，podManager 会被statusManager/volumeManager/runtimeManager 所调用，podManager 的接口处理流程里面会调用 secretManager 以及 configMapManager。
 
+---
 
+#### Evict策略
+
+驱逐信号Eviction Signal:  
+- memory.available
+- nodefs.available
+- nodefs.inodesFree
+- imagefs.available
+- imagefs.inodesFree
+
+软硬驱逐：–eviction-soft –eviction-hard  
+- 如果满足硬驱逐阈值，那么kubelet会立即杀死pods，没有优雅的终止。
+- 软驱逐阈值将驱逐阈值与所需的管理员指定的宽限期配对。
+
+将系统资源进行划分： 
+- Node Capacity 
+  - 已经作为NodeStatus.Capacity提供，这是从节点实例读取的总容量，并假定为常量。
+- System-Reserved
+  - 为未由Kubernetes管理的流程预留计算资源。目前，这涵盖了系统原始容器中集中的所有进程。
+- Kubelet Allocatable 
+  - 计算可用于调度的资源（包括计划和非计划资源）。
+- Kube-Reserved
+  - 为诸如docker守护进程，kubelet，kube代理等的Kubernetes组件预留的计算资源。
