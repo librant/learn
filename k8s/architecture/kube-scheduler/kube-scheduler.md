@@ -26,4 +26,31 @@
 factory.RegisterAlgorithmProvider() --> algorithmProviderMap
 ```
 
+亲和性和反亲和性：
+```go
+type Affinity struct {
+	NodeAffinity    *NodeAffinity
+	PodAffinity     *PodAffinity
+	PodAntiAffinity *PodAntiAffinity
+} 
+```
+---
+
+1、kube-scheduler: watch api-server: Added/Updated/Deleted
+
+- podInformer
+- nodeInformer
+SchedulingCache(Indexer)
+
+--> SchedulingQueue  (low/mid/high)
+
+```shell
+scheduleOne():
+sched.config.NextPod(): 从优先级队列中获取一个优先级最高的待调度 Pod 资源对象（阻塞模式）
+sched.schedule(pod): 调度函数执行预选调度算法和优选调度算法
+sched.preempt(): 抢占低优先级 Pod 资源
+sched.bind(): 将合适的节点与 Pod 资源对象绑定在一起
+```
+
+
 
