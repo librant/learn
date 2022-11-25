@@ -1,5 +1,14 @@
 #### CNI（Container Network Interface）
 
+```go
+type CNI interface {
+    AddNetworkList (net *NetworkConfigList, rt *RuntimeConf) (types.Result, error)
+    DelNetworkList (net *NetworkConfigList, rt *RuntimeConf) error
+    AddNetwork (net *NetworkConfig, rt *RuntimeConf) (types.Result, error)
+    DelNetwork (net *NetworkConfig, rt *RuntimeConf) error
+}
+```
+
 CNI 常用插件：
 - loopback
 - Bridge
