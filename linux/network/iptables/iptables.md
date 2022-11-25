@@ -69,3 +69,26 @@ iptables -t nat -A POSTROUTING -s 192.168.1.2 -j SNAT --to-source 10.172.16.1
 iptables-save
 iptables-restore
 ```
+
+---
+
+##### 1) iptables 三板斧：
+- table
+- chain
+- rule
+
+##### 2) iptables 5X5 表链：
+- INPUT: 一般用于处理输入本地进程数据包
+- OUTPUT: 一般用于处理本地进程的输出数据包
+- FORWARD: 一般用于处理转发到其他机器 /network namespace 的数据包
+- PREROUTING: 可以在此处进行 DNAT
+- POSTROUTING: 可以在此处进行 SNAT
+
+- filter: 用于控制到达某条链上的数据包是继续放行，直接丢弃（drop）或者拒绝（reject）
+- nat：用于修改数据包的源和目的地址
+- mangle: 用于修改数据包的 IP 头信息
+- raw：iptables 是有状态的，iptables 对数据包有跟踪（connecting tracking）机制，而 raw 是用来去除这种追踪机制
+- security: 在数据包上应用 SElinux
+
+
+
