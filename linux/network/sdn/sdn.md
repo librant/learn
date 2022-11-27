@@ -11,3 +11,10 @@
 
 3、SDN 网络架构
 ![img.png](img.png)
+
+k8s 网络平面隔离配置：
+![img_1.png](img_1.png)
+
+SDN 控制器、代理、及 CNI PLugin 在 k8s 上部署：
+![img_2.png](img_2.png)
+
