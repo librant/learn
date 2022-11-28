@@ -27,6 +27,19 @@ internet --> ingress --> service
 - Ingress controller: 用户自己实现
   - List/Watch Service/Endpoints/Ingress 对象，并根据信息刷新外部 LB 的规则
 
+5、kube-proxy 转发规则  
+--proxy-mode: 参数进行配置
+- userspace
+- iptables
+  - NodePort 类型的 service 创建的 iptables 规则：
+    - KUBE-NODEPORTS  
+    - KUBE-SVC-XXXXXXXXXXXX
+    - KUBE-SEP-XXXXXXXXXXXX (后端有几个节点，就有几条链)
+    - KUBE-SERVICES
+  - SNAT
+    - KUBE-MARK-MASQ 0x4000/0x4000
+- ipvs
+  - LVS 的负载均衡模块，基于 netfilter
 
 ---
 参考文章：  
