@@ -1,0 +1,18 @@
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: my-service-1 # 按惯例将服务的名称用作 EndpointSlice 名称的前缀
+  labels:
+    # 你应设置 "kubernetes.io/service-name" 标签。
+    # 设置其值以匹配服务的名称
+    kubernetes.io/service-name: my-service
+addressType: IPv4
+ports:
+  - name: '' # 留空，因为 port 9376 未被 IANA 分配为已注册端口
+    appProtocol: http
+    protocol: TCP
+    port: 9376
+endpoints:
+  - addresses:
+      - "10.4.5.6" # 此列表中的 IP 地址可以按任何顺序显示
+      - "10.1.2.3"

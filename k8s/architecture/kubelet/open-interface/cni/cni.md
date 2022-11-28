@@ -23,3 +23,9 @@ CNI 常用插件：
 - 四层负载均衡：基于 IP+端口 的负载均衡。
 - 七层负载均衡：基于 URL 等应用层信息的负载均衡。
 
+---
+kubelet 要使用 CNI 网络驱动需要配置启动参数： 
+- --network-plugin=cni
+- --cni-conf-dir (默认为：/etc/cni/net.d)
+- --cni-bin-dir (默认为：/opt/cni/bin)
+
