@@ -30,4 +30,31 @@ nslookup: cant resolve kubernetes.default
 - 检查容器中的 resolve.conf 文件
 - 检查 kube-coredns 插件是否已经启用（coredns pod 是否运行正常， service 对应的 endpoints 是否存在）
 
+6、网络故障定位指南
+- IP 转发  
+tcpdump 发送大量重复的 SYN 数据包，但没有收到 ACK
+  - 检查 net.ipv4.ip_forward 是否开启
+
+- 桥接  
+kubernetes 通过 bridge-netfilter 配置使 iptables 规则应用在 Linux 网桥上
+  - 检查 net.bridge.bridge-nf-call-iptables 是否开启
+
+- Pod CIDR 冲突  
+当 Pod 子网和主机网络出现冲突时，Pod 和 Pod 之间通信就会因为路由中断
+  - 检查网络配置，VLAN 或 VPC 之间不会有重叠
+  - 有冲突，修改 kubelet 的 pod-cidr 参数指定的地址范围
+
+- hairpin
+Pod 无法通过 Service IP 访问自己，可能就是 hairpin 设置问题
+  - kubelet 提供 --hairpin-mode 的标志 /sys/devices/virtual/net/
+    - hairpin-veth
+    - promiscuous-bridge
+
+- 故障排查工具
+  - tcpdump
+```shell
+tcpdump -i any host 172.x.x.x
+```
+  - nslookup
+
 
