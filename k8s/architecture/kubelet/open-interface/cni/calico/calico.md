@@ -25,6 +25,10 @@
 2、Calico 网络模式
 - BGP 边界网关协议（Border Gateway Protocol, BGP）
   - 是互联网上一个核心的去中心化自治路由协议。BGP不使用传统的内部网关协议（IGP）的指标。
+  - Calico 使用 BGP 的原因：
+    - BGP 是一种简单的路由协议
+    - 拥有当前行业最佳实践
+    - 唯一能支撑 Calico 网络规模的协议
   
 - IPIP 模式（隧道模式）
   - 在各个节点上创建 tunl0 的虚拟网络接口
