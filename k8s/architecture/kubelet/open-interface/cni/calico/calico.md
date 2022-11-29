@@ -1,9 +1,9 @@
 #### calico
 
-1、calico系统结构  
+1、calico 系统结构  
 ![img.png](img.png)
 
-- Felix: 负责管理设置node  
+- Felix: 负责管理设置 node  
   - 接口管理
   - 路由规则
   - ACL规则
@@ -63,6 +63,26 @@
 1）数据包从 Pod1 出到达 Veth Pair另一端（宿主机上，以cali前缀开头）  
 2）宿主机根据路由规则，将数据包转发给下一跳（网关）  
 3）到达 Node2，根据路由规则将数据包转发给 cali 设备，从而到达 Pod2。  
+
+4、Calico 网络策略  
+Kubernetes 只提供了 networkPolicy 的 API 定义；  
+Policy Controller 是由 Kubernetes 的网络插件提供的：
+- Calico
+- Cilium
+- Weave Net
+- Kube-router
+- Romana
+
+5、Calico 包含的组件  
+- calico-kube-controllers：用于从 APiServer 读取 Network Policy 等信息，并对 calico 进行配置
+- calico-node：通过配置 iptables 实现节点上 Pod 的出/入（ingress/egress）网络策略 （DaemonSet 运行）
+
+6、calico-controller 组件：
+- policy Controller：监视 kubernetes 的 NetworkPolicy 对象并编程 calico 策略
+- namespace controller：监视 kubernetes 的 Namespace 对象，并刷新 Calico 配置文件
+- serviceaccount controller：监视 kubernetes 的 ServiceAccount 对象并刷新 Calico 配置文件
+- workloadendpoints controller：监视 Pod 标签变更并刷新 Calico 工作负载中的 Endpoints 配置
+- node controller：监视 kubernetes Node 删除动作并从 Calico 数据库中删除相应数据
 
 ---
 参考文档：  

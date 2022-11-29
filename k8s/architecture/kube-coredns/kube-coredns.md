@@ -57,4 +57,9 @@ tcpdump -i any host 172.x.x.x
 ```
   - nslookup
 
+---
 
+1、CoreDNS 三个特点：
+- 插件化（Plugin）：基于 Caddy 服务框架，CoreDNS 实现一个插件链的结构
+- 配置简单化：引入表达了更强的 DSL
+- 一体化的解决方案：单独的可执行文件
