@@ -15,6 +15,39 @@
 - L7层访问控制协议扩展原理图
 ![img_2.png](img_2.png)
 
+2、Cilium 功能一览  
+1）容器的网络连接  
+- overlay：基于封装的虚拟网络产生所有主机
+- 直接路由：使用 Linux 主机内置或者云提供商的路由表
+
+2）基于策略的网络安全  
+- 基于身份
+- 基于 IP/CIDR
+- 基于 API
+
+3）分布式可扩展负载均衡  
+- eBPF 提供高性能 L3/L4 的服务转发和负载均衡
+  - rr/wrr/源 hash
+
+4）可视化  
+- 网络包
+- API
+
+5）监控  
+- 周期性的监控集群链接状态
+  - 节点延迟
+  - 节点失效
+  - 底层网络问题
+
+3、Cilium 网络策略
+```shell
+kind: CiliumNetworkPolicy
+```
+- TCP 策略
+- 基于网段的策略
+- HTTP 策略
+- 
+
 ---
 ##### 参考文档：
 [Cilium 中文指南](https://lib.jimmysong.io/cilium-handbook/)
