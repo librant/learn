@@ -27,6 +27,8 @@ internet --> ingress --> service
 - Ingress controller: 用户自己实现
   - List/Watch Service/Endpoints/Ingress 对象，并根据信息刷新外部 LB 的规则
 
+外部请求 --> Load Balancer --> Ingress Controller --> list/watch --> Service/Endpoints/Ingress
+
 5、kube-proxy 转发规则  
 --proxy-mode: 参数进行配置
 - userspace
