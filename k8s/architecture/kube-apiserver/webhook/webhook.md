@@ -29,4 +29,7 @@ kubectl get po $apiserver_pod_name -n kube-system -o yaml | grep plugin
 - --enable-admission-plugins=NodeRestriction,MutatingAdmissionWebhook,ValidatingAdmissionWebhook
 ```
 
+---
+###### 参考文档：
+https://blog.csdn.net/ll837448792/article/details/118674413
 
