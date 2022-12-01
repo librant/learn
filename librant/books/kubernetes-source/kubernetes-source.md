@@ -26,6 +26,11 @@ Kubernetes 总体架构图：
 kubelet 实现三种开放接口：
 - ContainerRuntimeInterface: (CRI)
   CRI 将 kubelet 组件与容器运行时进行解耦
+  - CRI client：kubelet 实现 grpc 的客户端
+  - CRI server：dockerd/containerd 的服务端
+  - OCI Runtime：真正容器执行 拉起、销毁 等动作
+    - runc：OCI 标准的一个具体实现
+      - 直接与 cgroup/namespace kernel 进行交互
 - ContainerNetworkInterface: (CNI)  
   容器创建时，通过 CNI 插件配置网络
 - ContainerStorageInterface: (CSI)
