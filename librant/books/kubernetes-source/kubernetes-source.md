@@ -129,7 +129,69 @@ type GroupVersionResource struct {
 }
 ```
 
+```shell
+staging/src/k8s.io/apimachinery/pkg/runtime/schema/group_version.go
+```
+- GroupVersionResource
+- GroupVersion
+- GroupResource
+- GroupVersionKind
+- GroupKind
+- GroupVersions
 
+Group/Version/Resource 核心数据结构详情：
+- APIGroup
+  - typeMeta
+  - Name string：资源名称
+  - Versions []GroupVersionForDiscovery：资源组下支持的资源版本
+  - PreferredVersion GroupVersionForDiscovery：首选版本
+  - ServerAddressByClientCIDRs []ServerAddressByClientCIDR
+
+- 将众多资源按照功能划分成不同的资源组，并允许单独启用和禁用资源组
+- 支持不同的资源组中拥有不同的资源版本
+- 支持同名的资源种类（Kind）存在不同的资源组中
+- 资源组和资源版本通过 API Server 对外暴露，允许开发者通过 HTTP 协议进行交互并通过动态客户端进行资源发现
+- 支持 CRD 自定义资源扩展
+- kubectl 可以不用填资源组名称
+
+- APIVersions
+  - TypeMeta
+  - Versions []string：所支持的资源版本列表
+  - ServerAddressByClientCIDRs []ServerAddressByClientCIDR
+
+kubernetes 的资源版本控制可以分为 3 种：
+- Alpha：内部测试
+- Beta：特定用户群来进行测试
+- Stable：稳定运行版本
+
+- APIResource
+  - Name string：资源名称
+  - SingularName string：资源的单数名称
+  - Namespaced bool：资源是否拥有所属的命名空间
+  - Group string：资源所在的资源组名称
+  - Version string：资源所在的资源版本
+  - Kind String：资源种类
+  - Verbs ：资源可操作的资源列表
+  - ShortNames []string：资源的简称
+  - Categories []string
+  - StorageVersionHash string
+
+资源控制系统 -- 管理、调度资源并维护资源状态
+
+Resource Object: 一个资源实例后会表达为一个资源对象，--》Entity
+- 持久性实体（Persistent Entity）：在资源对象被创建后，会持久确保该资源对象的存在
+  - Deployment
+- 短暂性实体（Ephemeral Entity）：在资源对象被创建后，如果出现故障或者调度失败，不会重新创建该资源对象
+  - Pod
+
+---
+资源外部版本与内部版本
+- External Version：
+  - External Object：外部资源对象，用于给外部用户请求的接口所使用的资源对象
+- Internal Version：
+  - Internal Object: 内部版本，不对外暴露，在 API Server 内部使用，用于多资源版本的转换
+
+---
 
 
 
