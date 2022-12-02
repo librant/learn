@@ -43,3 +43,6 @@ kubelet 要使用 CNI 网络驱动需要配置启动参数：
 - 容器 IP 地址重复问题
 - 容器 IP 地址路由问题
 
+---
+参考项目：  
+- https://github.com/containernetworking/cni
