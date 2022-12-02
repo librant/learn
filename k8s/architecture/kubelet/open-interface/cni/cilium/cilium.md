@@ -46,8 +46,19 @@ kind: CiliumNetworkPolicy
 - TCP 策略
 - 基于网段的策略
 - HTTP 策略
-- 
+
+---
+同一个 Node 上的 pod 通信  
+![img_4.png](img_4.png)
+- pod1 的 veth --> host veth --> tc ingress --> pod2 veth
+- bpf_redirect_peer() --> pod2 veth (同一个 namespace)
+
+不同 Node 上的 pod 通信  
+![img_5.png](img_5.png)
+- 通过 cilium_vxlan 的设备，通过 UDP 封包，传输到 pod2 对应的 Host 主机
+- 解包之后，传输到对应 pod2 的 veth 中
 
 ---
 ##### 参考文档：
 [Cilium 中文指南](https://lib.jimmysong.io/cilium-handbook/)
+[基于 ebpf 和 vxlan 实现一个 k8s 网络插件（一）](https://zhuanlan.zhihu.com/p/565254116)
