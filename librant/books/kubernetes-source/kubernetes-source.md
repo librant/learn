@@ -86,7 +86,7 @@ apps/v1, Kind=Deployment
 Kubernetes 系统支持 8 种资源操作方法：
 - create
 - delete
-- deletecollection
+- deletecollection：批量删除资源对象，kubectl 不支持该 verb， 在 rbac 中使用
 - get
 - patch
 - update
@@ -185,18 +185,181 @@ Resource Object: 一个资源实例后会表达为一个资源对象，--》Enti
   - Pod
 
 ---
-资源外部版本与内部版本
+资源外部版本与内部版本（pkg/apis/）
 - External Version：
   - External Object：外部资源对象，用于给外部用户请求的接口所使用的资源对象
+```shell
+<group>/<version>/apps/{v1, v1beta1}/
+```  
 - Internal Version：
   - Internal Object: 内部版本，不对外暴露，在 API Server 内部使用，用于多资源版本的转换
+```shell
+<group>/apps/__internal/
+
+staging/src/k8s.io/apimachinery/pkg/runtime/interfaces.go
+APIVersionInternal = "__internal" // 内部版本标识
+```
 
 ---
+资源对象描述定义：
+- Group/Version
+  - apiVersion：指定资源对象的资源组和资源版本
+- Kind
+  - kind：指定创建资源的种类
+- Metadata
+  - metadata：描述创建资源对象的元数据信息（名称，命名空间等）
+- Spec
+  - spec：包含有关资源对象的核心信息
+- Status
+  - status：正在运行的资源对象的状态信息
 
+---
+kubernetes 内置资源：
+- apiextensions.k8s.io
+  - CustomResourceDefinition：自定义资源类型（APIExtensionServer 负责管理）
+- apiregistration.k8s.io
+  - APIService：聚合资源类型（AggregatorServer 负责管理）
+- admissionregistration.k8s.io
+  - MutatingWebhookConfiguration：变更准入控制器资源类型
+  - ValidatingWebhookConfiguration：验证准入控制器资源类型
 
+---
+runtime.Object 类型系统基石
+```shell
+staging/src/k8s.io/apimachinery/pkg/runtime/interfaces.go
+```
+```go
+type Object interface {
+	GetObjectKind() schema.ObjectKind
+	DeepCopyObject() Object
+}
+```
+```shell
+staging/src/k8s.io/apimachinery/pkg/runtime/schema/interfaces.go
+```
+```go
+type ObjectKind interface {
+	// SetGroupVersionKind sets or clears the intended serialized kind of an object. Passing kind nil
+	// should clear the current setting.
+	SetGroupVersionKind(kind GroupVersionKind)
+	// GroupVersionKind returns the stored group, version, and kind of an object, or an empty struct
+	// if the object does not expose or provide these fields.
+	GroupVersionKind() GroupVersionKind
+}
+```
 
+---
+**Scheme 资源注册表**  
+kubernetes 系统中的资源类型，提供统一的注册，存储，查询，管理等机制；
+- 支持注册多种资源类型，包括内部版本和外部版本
+- 支持多种版本转换机制
+- 支持不同资源序列化/反序列化机制
 
+Scheme 支持两种资源类型（Type） 的注册
+- UnversionedType：无版本资源类型
+  - scheme.AddUnversionedTypes() 方法注册
+- KnownType：有版本资源类型
+  - scheme.AddKnownTypes() 方法注册
+  - scheme.AddKnownTypesWithName()：注册 KnownType 资源类型，须指定资源的 kind 资源种类名称
 
+Scheme 资源注册表数据结构
+- gvkToType：存储 GVK 与 Type 的映射关系
+- typeToGVK：存储 Type 和 GVK 的映射关系
+- unversionedTypes：存储 UnversionedType 与 GVK 的映射关系
+- unversionedKinds：存储 Kind 名称与 UnversionedType 映射关系
 
+```shell
+staging/src/k8s.io/apimachinery/pkg/runtime/scheme.go
+```
+```go
+type Scheme struct {
+  // gvkToType allows one to figure out the go type of an object with
+  // the given version and name.
+  gvkToType map[schema.GroupVersionKind]reflect.Type
+  
+  // typeToGVK allows one to find metadata for a given go object.
+  // The reflect.Type we index by should *not* be a pointer.
+  typeToGVK map[reflect.Type][]schema.GroupVersionKind
+  
+  // unversionedTypes are transformed without conversion in ConvertToVersion.
+  unversionedTypes map[reflect.Type]schema.GroupVersionKind
+  
+  // unversionedKinds are the names of kinds that can be created in the context of any group
+  // or version
+  // TODO: resolve the status of unversioned types.
+  unversionedKinds map[string]reflect.Type
+}
+```
 
+Scheme 资源注册表的查询方法：
+- scheme.KnownTypes：查询注册表中指定 GV 下的资源类型
+- scheme.AllKnownTypes：查询注册表中所有 GVK 下的资源类型
+- scheme.ObjectKinds：查询资源对象所对应的 GVK， 一个资源对象可能会存在多个 GVK
 
+---
+**Codec 编解码器**  
+编解码器 与 序列化器
+- Serializer  
+  - 序列化器：包含序列化和反序列化操作
+- Codec
+  - 编解码器：包含编码器和解码器
+
+```shell
+staging/src/k8s.io/apimachinery/pkg/runtime/interfaces.go
+```
+
+Codec 包含三种序列化器  
+- jsonSerializer：json 格式序列化/反序列化器 
+  - ContentType: application/json
+- yamlSerializer：yaml 格式序列化/反序列化器
+  - ContentType: application/yaml
+- protobufSerializer: pb 格式序列化/反序列化器
+  - ContentType: application/vnd.kubernetes.protobuf
+
+每一种序列化器都对资源对象的 metav1.TypeMeta（APIVersion,Kind 字段） 进行验证
+
+---
+Converter 资源版本转换器  
+在 kubernetes 系统中，同一个资源拥有多个资源版本，kubernetes 系统允许同一资源的不同资源版本进行转换；  
+-- kubectl convert 命令进行转换
+```shell
+v1alpha1 --> __internal --> v1beta1/v1
+```
+
+Converter 数据结构  
+```shell
+staging/src/k8s.io/apimachinery/pkg/conversion/converter.go
+```
+```go
+// Converter knows how to convert one type to another.
+type Converter struct {
+	// Map from the conversion pair to a function which can do the conversion.
+	conversionFuncs          ConversionFuncs
+	generatedConversionFuncs ConversionFuncs
+
+	// Set of conversions that should be treated as a no-op
+	ignoredUntypedConversions map[typePair]struct{}
+}
+```
+- conversionFuncs：默认转换函数
+- generatedConversionFuncs：自动生成的转换函数
+- ignoredUntypedConversions：若资源对象注册此字段，则忽略此资源对象的转换操作
+
+Converter 注册转换函数  
+- scheme.AddIgnoredConversionType：注册忽略的资源类型，不会执行转换操作，忽略资源对象的转换操作
+- scheme.AddConversionFuncs：注册多个 Conversion Func 转换函数
+- scheme.AddConversionFunc：注册单个 Conversion Func 转换函数
+- scheme.AddGeneratedConversionFunc: 注册自动生成的转换函数
+- scheme.AddFieldLabelConversionFunc：注册字段标签（Field Label）的转换函数
+
+Scheme 资源注册表可以通过两种方式进行版本转换  
+- scheme.ConvertToVersion：将传入的（in）资源对象转换成目标（target）资源版本
+- scheme.UnsafeConvertToVersion：在转换过程中不深复制资源对象，而是直接对资源对象进行转换操作
+
+```shell
+convertVersion() 
+--> reflect.TypeOf(in)：获取资源对象的反射类型
+--> s.typeToGVK[t]：从资源注册表中查找传入的资源对象的 GVK(kinds)
+--> target.KindForGroupVersionKinds(kinds)：从多个 GVK 中选出与目标资源对象匹配的 GVK 
+--> s.unversionedTypes[t]：判断传入的资源对象是否属于 Unversioned 类型 
+```
