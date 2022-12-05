@@ -2,6 +2,7 @@
 
 1、calico 系统结构  
 ![img.png](img.png)
+![img_1.png](img_1.png)
 
 - calicoctl: calico 的命令行工具
 
