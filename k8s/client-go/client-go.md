@@ -176,6 +176,41 @@ FIFO 队列数据结构：
 - 混合算法
 
 ---
+EventBroadcaster 事件管理器   
+用于展示集群内发生的情况
+- Event 资源对象
+  - Normal
+  - Warning
+- 事件管理机制
+  - EventRecorder 事件（Event）生产者
+  - EventBroadcaster 事件（Event）消费者
+  - broadcasterWatcher 观察者（Watcher）管理
+
+1) EventRecorder   
+```shell
+k8s.io/client-go/tools/record/event.go
+
+type EventRecorder interface {} 
+```
+- Event：对刚发生的事件进行记录
+- Eventf：通过 fmt.Printf() 格式化输出事件的格式
+- PastEventf：允许自定义事件发生的时间，以记录已经发生过的消息
+- AnnotationEventf：附加注释（Annotation）字段的 Eventf
+
+2) EventBroadcaster   
+消费 EventRecorder 记录的事件并将其分发给目前所有链接的 broadcasterWatcher   
+- 阻塞分发机制
+  - WaitIfChannelFull
+- 非阻塞分发机制
+  - DropIfChannelFull
+
+3) broadcasterWatcher   
+kubernetes 系统组件自定义处理事件的方式
+- StartLogging：将事件写入日志中
+- StartRecordingToSink：将事件上报至 API Server
+
+StartEventWatcher():   
+- 内部运行一个 goroutine，用于不断监控 EventBroadcaster 来发现事件并调用相关函数对事件进行处理
 
 
 ---
