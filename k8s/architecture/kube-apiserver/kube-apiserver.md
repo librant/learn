@@ -27,7 +27,7 @@
 
 1、用户向 kube-apiserver 发出 http 请求
 
-2、kube-apiserver 接收到请求，启动 gorouting 处理接收到的请求
+2、kube-apiserver 接收到请求，启动 goroutine 处理接收到的请求
 
 3、kube-apiserver 验证请求内容中的认证（auth）信息
 
