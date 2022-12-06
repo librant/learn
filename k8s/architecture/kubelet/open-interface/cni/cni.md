@@ -47,7 +47,7 @@ kubelet 要使用 CNI 网络驱动需要配置启动参数：
 CNI 网络插件的开发方式   
 - CNI 插件的详细工作流程
 1）kubelet 的 grpc-client 调用 CRI grpc-server (dockerd/containerd)，创建一个 pod
-2) grpc-server 按照一定的流程去 pull image, 创建 Sandbox(pause), 创建 netns，启动容器，将容器加入 Sandbox()
+2) grpc-server 按照一定的流程去 pull image, 创建 RunPodSandbox(pause), 创建 netns，启动容器，将容器加入 Sandbox()
 3) grpc-server 读取主机上 cni 配置（/etc/cni/net.d），获取 cni 的 name
 4) 在 （/opt/kubernetes/cni/bin） 下访问 name 的二进制文件，
    grpc-server 传入 containerID, netns，eth-name，pod-name 等参数信息
