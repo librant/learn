@@ -84,6 +84,19 @@ DOCKER_OPT_MTU="--mtu=1472"
 DOCKER_NETWORK_OPTIONS="--bip=10.0.34.1/24 --ip-masq=true --mtu=1472"
 ```
 
+---
+
+1、跨 node 之间的 pod 进行通信：  
+- pod1根据自己的路由表将包发给CNI0
+- CNI0根据自己的路由表将包发给flannel.1
+- flannel.1根据flanneld提供的IP、MAC信息进行内层封装
+- linux内核进行外层封装
+- 将包发给node2
+- node2接受到包后，内核识别到这是一个vxlan，拆开后将包发给flannel.1设备
+- flannel.1根据路由表将包发往CNI0
+- CNI0根据ARP协议获得目标MAC地址，将包发给pod2
+
+![img_6.png](img_6.png)
 
 
 
