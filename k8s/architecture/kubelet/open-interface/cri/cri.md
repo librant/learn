@@ -1,5 +1,11 @@
 #### CRI（Container Runtime Interface）
 
+```go
+type RuntimeService interface {
+	RunPodSandbox()
+}
+```
+
 CRI 主要分为三部分：
 - CRI Client
 - CRI Server
