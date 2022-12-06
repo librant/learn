@@ -64,6 +64,22 @@ CNI 网络插件的开发方式
 5）容器必须由 ContainerID 唯一标识。存储状态的插件应该使用（网络名称，容器 ID）的主键来完成   
 6）运行时不能调用同一个网络名称或容器 ID 执行两次 ADD（没有相应的 DEL）
 
+- CNI 基本插件 
+![img.png](img.png)
+1）ipam：用于管理 ip 和相关网络数据，配置网卡，ip，路由   
+2）main: 用于进行网络配置，创建网桥，vethpair, macvlan 等
+  - bridge/ipvlan/loopback/macvlan/ptp/vlan
+3）meta：用于和第三方 CNI 插件进行适配，flannel，或者配置内核参数 tuning
+
+ptp 网络配置步骤   
+1）从 ipam 获取 IP，根据 ip 类型（ipv4或ipv6）配置响应的内核 ip_forward 参数；
+2）创建一对 vethpair，一端放到容器中；  
+3）进入容器的网络 namespace，配置容器端的网卡，修改网卡名，配置 IP，并配置一些路由；  
+4）退出到容器外，将 vethpair 的node端配置一个 IP；   
+5）配置外部的路由：访问容器ip的请求都路由到 vethpair 的node端设备去；   
+6）如果 IPMasq=true，配置 iptables；   
+7）获取完整的网卡信息（ vethpair 的两端），返回给调用者；
+
 ---
 参考项目：  
 - https://github.com/containernetworking/cni
