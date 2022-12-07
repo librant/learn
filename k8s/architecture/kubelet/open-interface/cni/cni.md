@@ -71,7 +71,51 @@ CNI 网络插件的开发方式
   - bridge/ipvlan/loopback/macvlan/ptp/vlan
 3）meta：用于和第三方 CNI 插件进行适配，flannel，或者配置内核参数 tuning
 
-ptp 网络配置步骤   
+**将容器添加到网络：**   
+- 版本：调用者正在使用的 CNI 规范
+- 容器 ID：由容器运行时分配的容器的唯一明文标识符
+- 网络命名空间路径：需要添加的网络名称空间的路径（/proc/[pid]/ns/net）
+- 网络配置：描述容器可以加入网络的 JSON 文档
+- 额外的参数：提供一个替代机制，允许在每个容器上配置 CNI 插件
+- 容器内的接口的名称：分配给容器（网络命名空间）内创建的接口名称
+
+-- 结果：
+- 接口与列表
+- 分配给每个接口的 IP 设置
+- DNS 信息
+  - nameserver 
+  - domain 
+  - search domain 
+  - option
+
+**从网络中删除容器：**
+- 版本
+- 容器 ID
+- 网络命名空间路径
+- 网络配置
+- 额外的参数
+- 定义的容器接口名称
+
+IP 分配：
+- IPAM 插件：接收所有传入 CNI 插件的相同环境变量
+
+可用插件：
+- Main：接口创建
+  - bridge：创建网桥，并添加主机和容器到该网桥
+  - ipvlan：在容器中添加一个 ipvlan 接口
+  - loopback：创建一个回环接口
+  - macvlan：创建一个新的 mac 地址，将所有的流量转发到容器
+  - ptp：创建 veth 对
+  - vlan：分配一个 vlan 设备
+- IPAM：IP 地址分配
+  - dhcp：在主机上运行守护程序，代表容器发出的 dhcp 请求
+  - host-local：维护分配 IP 的本地数据库
+- Meta：其他插件
+  - flannel：根据 flannel 的配置文件创建接口
+  - tuning：调整现有接口 sysctl 参数
+  - portmap：一个基于 iptables 的 portmapping 插件
+  
+ptp 网络配置步骤：     
 1）从 ipam 获取 IP，根据 ip 类型（ipv4或ipv6）配置响应的内核 ip_forward 参数；
 2）创建一对 vethpair，一端放到容器中；  
 3）进入容器的网络 namespace，配置容器端的网卡，修改网卡名，配置 IP，并配置一些路由；  
