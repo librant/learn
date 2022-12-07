@@ -44,3 +44,31 @@ kubelet 可以选择是否执行在容器上运行的两种探针：
   - Always
   - OnFailure
   - Never
+
+6) Pod Hook    
+Pod Hook（钩子）是由 Kubernetes 管理的 kubelet 发起的；
+- Hook 的类型
+  - exec：执行一段命令
+  - HTTP：发送 HTTP 请求
+
+- postStart：容器创建之后（但并不能保证钩子会在容器 ENTRYPOINT 之前）执行
+- preStop：在容器终止之前被同步阻塞调用，常用于在容器结束前优雅释放资源
+
+7) Pod Preset   
+Preset 就是预设，该对象用来在 Pod 创建的时候向 Pod 中注入某些特定信息；
+- secret/volume/volume mount/环境变量
+
+Preset 如何工作：   
+- 检索所有可用的 PodPresets
+- 检查 PodPreset 标签选择器上的标签，看看其是否能够匹配正在创建的 Pod 上的标签
+- 尝试将由 PodPreset 定义的各种资源合并到正在创建的 Pod 中
+- 出现错误时，在该 Pod 上引发记录合并错误的事件，PodPreset 不会注入任何资源到创建的 Pod 中
+- 注释（Annotation）刚生成的修改过的 Pod spec，以表明它已被 PodPreset 修改过
+```shell
+podpreset.admission.kubernetes.io/podpreset-<pod-preset name>": "<resource version>"
+```
+
+启动 Pod Preset   
+- 荣光在命名空间创建 PodPreset 对象来定义 PodPreset
+
+**PodPreset（Pod 预设置）的功能从 v1.11 版本开始出现，但是又在 v1.20 版本取消**
