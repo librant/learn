@@ -18,3 +18,5 @@ k8s 网络平面隔离配置：
 SDN 控制器、代理、及 CNI PLugin 在 k8s 上部署：
 ![img_2.png](img_2.png)
 
+Mutus networking Architecture overlay and ipvlan：   
+![img_3.png](img_3.png)
