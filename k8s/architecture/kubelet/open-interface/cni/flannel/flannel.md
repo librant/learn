@@ -98,6 +98,10 @@ DOCKER_NETWORK_OPTIONS="--bip=10.0.34.1/24 --ip-masq=true --mtu=1472"
 
 ![img_6.png](img_6.png)
 
+---
+参考文档：
+- [CNI网络插件之flannel](https://blog.csdn.net/m0_48594855/article/details/107145561)
+
 
 
 
