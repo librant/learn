@@ -10,19 +10,37 @@ Flannel是一种基于 overlay 网络的跨主机容器网络解决方案，也�
 - UDP （基本弃用）
   - cni0 --> bridge 网桥设备  
   - flannel0 --> tun 虚拟设备  
-  - flanneld --> agent (DaemonSet) 网络包的封包和解包
+  - flanneld --> agent (DaemonSet) 网络包的封包和解包   
+```shell
+// 将三层的 IP 报文封装在一个 UDP 的报文中, 三层报文的两个 IP 不在同一个节点上
+节点1 的 PodA --> cni0 --> flannel0 (tunl设备) --> flanneld:8285 --> 
+eth0 (节点1 的公网 IP 所在网卡) --> internet --> eth1 (节点2 的公网 IP 所在网卡)
+--> flanneld:8285 --> flannel0 (tunl 设备) --> cni0 --> 节点2 的 PodB
+```
+
 - VxLAN
   - VTEP 的 MAC 地址是通过 APIServer 处 watch Node 发现 
   - flannel.1 (flannel.[VNI])
   - flanneld：将 VTEP 设备相关信息上报到 etcd 中, 当网络中有新节点加入集群中，并向 etcd 注册时：
     - 在节点中创建一条该节点所属网络的路由表 --》 Pod 中的流量路由到 flannel.1 接口 （route -n）
     - 在节点中添加一条该节点 IP 及 VTEP 设备的静态 ARP 缓存 (arp -n) 
+```shell
+// 将三层的 IP 报文封装在一个 UDP 的报文中, 三层报文的两个 IP 不在同一个节点上
+节点1 的 PodA --> cni0 --> flannel.1 (VTEP 设备)  --> eth0 (节点1 的公网 IP 所在网卡) 
+--> internet --> eth1 (节点2 的公网 IP 所在网卡) --> flannel.1 (VTEP 设备) --> cni0 --> 节点2 的 PodB
+```  
+
 - Host-GW
   - 通过容器路由表 IP 到 cni0
   - 到达 cni0 的 IP 包匹配到 HostA 中的路由规则 --> Host B
   - IP 包通过物理网络到达 Host B 中的 eth1
   - 到达 eth1 中的 IP 包匹配到 Host B 中的路由表项， IP 包转发到 cni0
   - cni0 将 IP 包转发给链接在 cni0 上的目的容器
+```shell
+// 增加路由来将报文转发到对应的节点上
+节点1 的 PodA --> cni0 --> eth0 (节点1 的公网 IP 所在网卡) 
+--> internet --> eth1 (节点2 的公网 IP 所在网卡)  --> cni0 --> 节点2 的 PodB
+```
 
 - VxLAN 模式
 ![img_2.png](img_2.png)
@@ -97,6 +115,17 @@ DOCKER_NETWORK_OPTIONS="--bip=10.0.34.1/24 --ip-masq=true --mtu=1472"
 - CNI0根据ARP协议获得目标MAC地址，将包发给pod2
 
 ![img_6.png](img_6.png)
+
+2、flannel 解决的问题：   
+- 只要配置 master 节点, 自动配置集群各节点的子网，网关
+- 自动创建 cni0 网桥，用于单节点容器间的互连，自动设置 cni0 网卡 ip，并作为节点内容器的网关
+- 根据实际使用的类型udp/vxlan/host-gw 在跨节点上自动配置相应的网络路由以及封装规则
+  - UDP 模式：创建 flannel0（tun）设备，flanneld 进配置进行 udp 外层（公网ip）分装
+  - VxLan 模式：创建 flannel.1(VTEP) 设备，设置相应的fdb转发规则，使用内核 vxlan 模块进行外层（公网ip）封装
+  - host-gw 模式：自动配置网段路由进行路由转发
+- 自动为外部网络的访问，创建 NAT 规则，用于容器内部访问外部网络
+- 通过创建 veth-pair 设备对，一端放在容器内部，另外一端放在 cni0 网桥上，保障容器内部可以直接与 cni0 网桥通信
+- flannel 的 udp/vxlan 属于 overlay 的网络技术，安全方面有保障，另外也提供了一个性能较高的 host-gw 方案
 
 ---
 参考文档：
