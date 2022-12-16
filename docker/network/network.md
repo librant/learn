@@ -8,6 +8,7 @@
 
 bridge 模式：
 ![img.png](img.png)
+![img_3.png](img_3.png)
 
 1、docker 启动后默认创建的 docker0 网桥
 ```shell

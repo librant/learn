@@ -17,6 +17,47 @@ istio 是 service Mesh 架构的一种实现，服务间的通信会通过代理
 - 在具有强大的基于身份验证和授权的集群中实现安全的服务间通信
 
 ---
+TLS Ingress   
+
+1) 证书创建
+```shell
+// 创建一个根证书及私钥
+openssl req -x509 -sha256 -nodes days 365 -newkey rsa:2048 -subj '/O=exampleInc./CN=example.com'
+-keyout example.com.key -out example.com.crt
+```
+
+为 Ingress 网关将要暴露的服务创建一个新的证书和私钥：
+```shell
+openssl req -out httpbin.example.com.csr -newkey rsa:2048 -nodes
+-keyout httpbin.example.com.key -subj "/CN=httpbin.example.com/O=httpbin organization"
+
+openssl x509 -req -days 365 -CA example.com.crt -CAkey example.com.key -set_serial 0
+-in httpbin.example.com.csr -out httpbin.example.com.crt
+```
+
+2) TLS 认证
+
+证书下发：   
+- 通过文件挂载来下发证书
+- Envoy 提供 SDS 协议下发证书
+
+创建 kubernetes Secret 保存刚刚创建的证书文件：
+```shell
+kubectl create -n istio-system secret tls istio-ingressgateway-certs --key httpbin.example.com.key --cert httpbin.example.com.crt 
+```
+
+3) 双向认证
+
+- 客户端对服务端的验证
+- 服务端对客户端的验证
+
+创建客户端证书：
+```shell
+openssl req -out httpbin-client.example.com.csr -newkey rsa:2048 -nodes 
+-keyout 
+```
+
+---
 参考文章：
 - https://blog.csdn.net/bxg_kyjgs/article/details/125599452
 
