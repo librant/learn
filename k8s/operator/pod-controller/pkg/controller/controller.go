@@ -58,7 +58,7 @@ func (c *controller) Run(threadiness int, stopCh <-chan struct{}) error {
 	defer runtime.HandleCrash()
 	defer c.queue.ShutDown()
 
-	// 开始处理业务逻辑，开始同步数据
+	// 开始处理业务逻辑，开始同步数据，多个 informer 的时候不需要自己调用，直接在外层调用 factory 的方法
 	klog.Infof("begin pod sync...")
 	if ok := cache.WaitForCacheSync(stopCh, c.podSynced); !ok {
 		return fmt.Errorf("failed to wait for caches to sync")

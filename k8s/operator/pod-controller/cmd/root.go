@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	"os"
 	"time"
 
@@ -37,11 +38,15 @@ var rootCmd = &cobra.Command{
 		}
 
 		podFactory := informers.NewSharedInformerFactory(clientset, time.Minute)
+		// podInformer := podFactory.InformerFor(corev1.Pod{}, )
 		podInformer := podFactory.Core().V1().Pods()
 		podController := controller.New(clientset, podInformer)
 
 		// 启动 informer
 		go podFactory.Start(stopCh)
+
+		// 如果有多个 informer 的时候， 直接调用 factory 的 WaitForCacheSync() 方法
+		// res := podFactory.WaitForCacheSync(stopCh)
 
 		if err := podController.Run(maxWorkNum, stopCh); err != nil {
 			klog.Fatalln(err)
