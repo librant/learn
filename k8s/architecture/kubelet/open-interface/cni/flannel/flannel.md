@@ -128,10 +128,19 @@ DOCKER_NETWORK_OPTIONS="--bip=10.0.34.1/24 --ip-masq=true --mtu=1472"
 - flannel 的 udp/vxlan 属于 overlay 的网络技术，安全方面有保障，另外也提供了一个性能较高的 host-gw 方案
 
 ---
+
+### Flannel
+
+- 为每个 node 分配 subnet，容器将自动从该子网中获取 IP 地址
+- 当有 node 加入到网络中时，为每个 node 增加路由配置
+
+1) Host-gw 方式：
+![img_7.png](img_7.png)
+
+---
 参考文档：
 - [CNI网络插件之flannel](https://blog.csdn.net/m0_48594855/article/details/107145561)
-
-
+- https://jimmysong.io/kubernetes-handbook/concepts/flannel.html
 
 
 

@@ -28,3 +28,36 @@ route -n
 docker inspect -f "{{ .NetworkSettings.IPAddress }}" <containerID or Name>
 ```
 
+---
+1) 查看节点上的 docker 网络
+```shell
+docker network ls
+```
+![img_4.png](img_4.png)
+
+2) 查看网络信息
+```shell
+docker network inspect network_id
+```
+
+![img_5.png](img_5.png)
+
+3) 运行一个 nginx 容器
+```shell
+docker run --name nginx-test -p 8080:80 -d nginx
+```
+
+4) 查看当前运行的容器
+```shell
+docker ps
+```
+![img_6.png](img_6.png)
+
+5) 查看节点上的路由
+```shell
+route -n
+```
+![img_7.png](img_7.png)
+
+
+
