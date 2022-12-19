@@ -1,6 +1,7 @@
 
 #### cilium 架构
 ![img_3.png](img_3.png)
+![img_6.png](img_6.png)
 
 - Cilium Agent
 - Cilium Operator
