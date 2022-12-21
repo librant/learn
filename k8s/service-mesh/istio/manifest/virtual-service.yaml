@@ -1,0 +1,24 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: reviews-route
+  namespace: foo
+spec:
+  hosts:
+    - reviews # interpreted as reviews.foo.svc.cluster.local
+  http:
+    - match:
+        - uri:
+            prefix: "/wpcatalog"
+        - uri:
+            prefix: "/consumercatalog"
+      rewrite:
+        uri: "/newcatalog"
+      route:
+        - destination:
+            host: reviews # interpreted as reviews.foo.svc.cluster.local
+            subset: v2
+    - route:
+        - destination:
+            host: reviews # interpreted as reviews.foo.svc.cluster.local
+            subset: v1
