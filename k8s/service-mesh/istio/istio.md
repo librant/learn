@@ -60,4 +60,6 @@ openssl req -out httpbin-client.example.com.csr -newkey rsa:2048 -nodes
 ---
 参考文章：
 - https://blog.csdn.net/bxg_kyjgs/article/details/125599452
+- [pilot-discovery模块分析](https://zhuanlan.zhihu.com/p/506625295)
+- [pilot-agent组件分析](https://zhuanlan.zhihu.com/p/463929524)
 
