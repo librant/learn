@@ -11,3 +11,5 @@ netstat -untlp
 
 3、iptables
 - https://blog.csdn.net/shujuliu818/article/details/125649998
+
+4、nslookup
