@@ -16,7 +16,8 @@ func InstallHandlerForPProf(mux *http.ServeMux) {
 
 func main() {
 	mux := http.NewServeMux()
-	mux.Handle("/metrics", nil)
+	// 当需要 handler 可以添加
+	// mux.Handle("/metrics", nil)
 	InstallHandlerForPProf(mux)
 
 	s := http.Server{
