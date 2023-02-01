@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 )
 
 func main() {
@@ -12,6 +13,7 @@ func main() {
 	for i, arg := range os.Args {
 		fmt.Println("arg", i)
 		fmt.Println("arg", arg)
+		fmt.Println(filepath.Base(arg))
 	}
 
 	fileInfo, err := os.Stat("./test.txt")
