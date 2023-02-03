@@ -27,3 +27,7 @@ func registerModules(c *v1alpha1.CloudCoreConfig) {
 每个模块实现自己的注册函数；
 
 --》 cloudhub.Register(c.Modules.CloudHub)
+
+---
+
+1、beehive 模块学习
